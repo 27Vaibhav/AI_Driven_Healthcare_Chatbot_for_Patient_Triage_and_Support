@@ -1,1 +1,1 @@
-{"version":602,"config":{"vector_data":{"":{"size":768,"distance":"Cosine","storage_type":"Memory","index":{"type":"plain","options":{}},"quantization_config":null}},"payload_storage_type":{"type":"on_disk"}}}
+{"version":658,"config":{"vector_data":{"":{"size":768,"distance":"Cosine","storage_type":"Memory","index":{"type":"plain","options":{}},"quantization_config":null}},"payload_storage_type":{"type":"on_disk"}}}
