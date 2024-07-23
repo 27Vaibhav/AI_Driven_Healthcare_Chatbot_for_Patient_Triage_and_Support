@@ -4,6 +4,9 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from qdrant_client import QdrantClient
 from langchain_community.vectorstores import Qdrant
+import contextlib
+import io
+import sys
 
 # Load a local BioMistral LLM model with specified settings.
 local_llm = "C:/Users/Vaibhav/AI_Driven_Healthcare_Chatbot_for_Patient_Triage_and_Support/model/BioMistral-7B.Q4_K_M.gguf"
@@ -40,29 +43,33 @@ cache = {}
 # Create the custom chain
 chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=retriever)
 
+# Define the helper function to suppress unwanted output
+@contextlib.contextmanager
+def suppress_output():
+    with contextlib.redirect_stdout(io.StringIO()):
+        with contextlib.redirect_stderr(io.StringIO()):
+            yield
+
 # Define the actual prediction function that will carry on the chatbot conversation.
 def predict(message, history):
-    # Check if the message is already in cache
-    if message in cache:
-        answer = cache[message]
-        print("Fetching from cache...")
-    else:
-        response = chain({"question": message, "chat_history": history})
-        answer = response['answer']
-        # Store the answer in cache
-        cache[message] = answer
-        print("Fetching from database...")
+    with suppress_output():
+        if message in cache:
+            answer = cache[message]
+        else:
+            response = chain({"question": message, "chat_history": history})
+            answer = response['answer']
+            cache[message] = answer
     
     history.append((message, answer))
     return answer
 
 # Run the chatbot in a loop
 if __name__ == "__main__":
-    print("AI-Driven Healthcare Chatbot for Patient Triage and Support")
-    print("Type 'exit' to end the conversation.")
+    print("AI-Driven Healthcare Chatbot for Patient Triage and Support\n")
+    print("Type 'exit' to end the conversation.\n")
     while True:
         user_input = input("Enter your medical query here: ")
         if user_input.lower() == 'exit':
             break
         response = predict(user_input, chat_history)
-        print("Chatbot:", response)
+        print("\nChatbot:", response, "\n")
