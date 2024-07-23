@@ -1,3 +1,4 @@
+from flask import Flask, render_template, request, jsonify
 from langchain import PromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain.chains import ConversationalRetrievalChain
@@ -6,7 +7,8 @@ from qdrant_client import QdrantClient
 from langchain_community.vectorstores import Qdrant
 import contextlib
 import io
-import sys
+
+app = Flask(__name__)
 
 # Load a local BioMistral LLM model with specified settings.
 local_llm = "C:/Users/Vaibhav/AI_Driven_Healthcare_Chatbot_for_Patient_Triage_and_Support/model/BioMistral-7B.Q4_K_M.gguf"
@@ -63,13 +65,15 @@ def predict(message, history):
     history.append((message, answer))
     return answer
 
-# Run the chatbot in a loop
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/get_response', methods=['POST'])
+def get_response():
+    user_input = request.json.get('message')
+    response = predict(user_input, chat_history)
+    return jsonify({'response': response})
+
 if __name__ == "__main__":
-    print("AI-Driven Healthcare Chatbot for Patient Triage and Support\n")
-    print("Type 'exit' to end the conversation.\n")
-    while True:
-        user_input = input("Enter your medical query here: ")
-        if user_input.lower() == 'exit':
-            break
-        response = predict(user_input, chat_history)
-        print("\nChatbot:", response, "\n")
+    app.run(debug=True)
