@@ -45,18 +45,16 @@ This project aims to develop an AI-driven healthcare chatbot designed for patien
 4. After receiving a response, you can enter another query.
 
 ## Project Structure
-yourproject/
-│
-├── model/ # Directory for BioMistral model
-│ └── BioMistral-7B.Q4_K_M.gguf
-├── static/ # Static files (CSS, JS)
-│ ├── css/
-│ └── js/
-├── templates/ # HTML templates
-│ └── index.html
-├── app.py # Main Flask application
-├── requirements.txt # Project dependencies
-└── README.md # Project README
+- `model/`: Directory for BioMistral model
+  - `BioMistral-7B.Q4_K_M.gguf`
+- `static/`: Static files (CSS, JS)
+  - `css/`
+  - `js/`
+- `templates/`: HTML templates
+  - `index.html`
+- `app.py`: Main Flask application
+- `requirements.txt`: Project dependencies
+- `README.md`: Project README
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
