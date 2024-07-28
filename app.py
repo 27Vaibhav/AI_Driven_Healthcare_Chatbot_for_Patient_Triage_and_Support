@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from langchain import PromptTemplate
 from langchain_community.llms import LlamaCpp
 from langchain.chains import ConversationalRetrievalChain
@@ -9,6 +10,7 @@ import contextlib
 import io
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 # Load a local BioMistral LLM model with specified settings.
 local_llm = "C:/Users/Vaibhav/AI_Driven_Healthcare_Chatbot_for_Patient_Triage_and_Support/model/BioMistral-7B.Q4_K_M.gguf"
@@ -76,4 +78,4 @@ def get_response():
     return jsonify({'response': response})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)  # Ensure the Flask server runs on port 5000
